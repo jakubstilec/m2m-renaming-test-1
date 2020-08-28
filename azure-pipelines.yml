@@ -22,38 +22,41 @@ pr:
     - master
 
 stages:
+- stage: Build_Windows_NT
+  displayName: Build Windows
+  dependsOn:
+  jobs:
+  - template: /eng/common/templates/jobs/jobs.yml
+    parameters:
+      enableTelemetry: true
+      enablePublishBuildArtifacts: true
+      enableMicrobuild: true
+      enablePublishUsingPipelines: true
+      enablePublishBuildAssets: true
+      helixRepo: dotnet/m2m-renaming-test-1
 
-- ${{ if eq(variables._RunAsPublic, True) }}:
-  - stage: Build_OSX
-    displayName: Build
-    dependsOn:
-    jobs:
-    - template: /eng/common/templates/jobs/jobs.yml
-      parameters:
-        enableTelemetry: true
-        enablePublishBuildArtifacts: true
-        enableMicrobuild: true
-        enablePublishUsingPipelines: true
-        enablePublishBuildAssets: true
-        helixRepo: dotnet/m2m-renaming-test-1
-
-        jobs:
-        - job: OSX
-          pool:
-            name: Hosted macOS
-          strategy:
-            matrix:
-              Release:
-                _BuildConfig: Release
-          steps:
-          - script: eng/common/cibuild.sh
-              --configuration $(_BuildConfig)
-              --prepareMachine
-              $(_InternalBuildArgs)
-              /p:Test=false
-            name: Build
-            displayName: Build
-            condition: succeeded()
+      jobs:
+      - job: Windows_NT
+        pool:
+          ${{ if eq(variables._RunAsInternal, True) }}:
+              name: NetCoreInternal-Pool
+              queue: BuildPool.Server.Amd64.VS2019
+          ${{ if eq(variables._RunAsPublic, True) }}:
+              name: NetCorePublic-Pool
+              queue: BuildPool.Server.Amd64.VS2019.Open
+        strategy:
+          matrix:
+            Release:
+              _BuildConfig: Release
+        steps:
+        - script: eng\common\CIBuild.cmd
+            -configuration $(_BuildConfig)
+            -prepareMachine
+            $(_InternalBuildArgs)
+            /p:Test=false
+          name: Build
+          displayName: Build
+          condition: succeeded()
 
 - ${{ if eq(variables._RunAsInternal, True) }}:
   - template: eng\common\templates\post-build\post-build.yml
