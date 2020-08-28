@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A275E4CF-6AF3-439A-B72B-A2EDAE49A5C6}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{713ACDCF-301D-4C96-8B75-5BF2A35A326D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.DotNet.M2MRenaming.TestProject", "src\Microsoft.DotNet.M2MRenaming.TestProject\Microsoft.DotNet.M2MRenaming.TestProject.csproj", "{50A93858-C4FA-4CFD-BF11-603D140AF0A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50A93858-C4FA-4CFD-BF11-603D140AF0A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50A93858-C4FA-4CFD-BF11-603D140AF0A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50A93858-C4FA-4CFD-BF11-603D140AF0A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50A93858-C4FA-4CFD-BF11-603D140AF0A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{50A93858-C4FA-4CFD-BF11-603D140AF0A3} = {713ACDCF-301D-4C96-8B75-5BF2A35A326D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56D5F4DA-F710-4026-8F49-4A903BCAA9B5}
+	EndGlobalSection
+EndGlobal
