@@ -1,0 +1,79 @@
+variables:
+  - template: eng/common-variables.yml
+  - name: Build.Repository.Clean
+    value: true
+  - name: _DotNetCliPackageType
+    value: sdk
+  - name: _DotNetCliVersion
+    value: 3.1.101
+  - name: _HelixAccessToken
+    value: ''
+
+# CI and PR triggers
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+
+pr:
+  branches:
+    include:
+    - master
+
+stages:
+
+- ${{ if eq(variables._RunAsPublic, True) }}:
+  - stage: Build_OSX
+    displayName: Build
+    dependsOn:
+    jobs:
+    - template: /eng/common/templates/jobs/jobs.yml
+      parameters:
+        enableTelemetry: true
+        enablePublishBuildArtifacts: true
+        enableMicrobuild: true
+        enablePublishUsingPipelines: true
+        enablePublishBuildAssets: true
+        helixRepo: dotnet/m2m-renaming-test-1
+
+        jobs:
+        - job: OSX
+          pool:
+            name: Hosted macOS
+          strategy:
+            matrix:
+              Release:
+                _BuildConfig: Release
+          steps:
+          - script: eng/common/cibuild.sh
+              --configuration $(_BuildConfig)
+              --prepareMachine
+              $(_InternalBuildArgs)
+              /p:Test=false
+            name: Build
+            displayName: Build
+            condition: succeeded()
+
+- ${{ if eq(variables._RunAsInternal, True) }}:
+  - template: eng\common\templates\post-build\post-build.yml
+    parameters:
+      enableSymbolValidation: true
+      validateDependsOn:
+      - Build_Windows_NT
+      publishDependsOn:
+      - Validate
+      # This is to enable SDL runs part of Post-Build Validation Stage
+      SDLValidationParameters:
+        enable: false
+        continueOnError: false
+        params: ' -SourceToolsList @("policheck","credscan")
+        -TsaInstanceURL $(_TsaInstanceURL)
+        -TsaProjectName $(_TsaProjectName)
+        -TsaNotificationEmail $(_TsaNotificationEmail)
+        -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
+        -TsaBugAreaPath $(_TsaBugAreaPath)
+        -TsaIterationPath $(_TsaIterationPath)
+        -TsaRepositoryName "Arcade"
+        -TsaCodebaseName "Arcade"
+        -TsaPublish $True'
