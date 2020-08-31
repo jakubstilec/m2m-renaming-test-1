@@ -1,4 +1,4 @@
-This is a repository used to test master-to-main renaming for repositories in the dotnet organization.
+This is a repository used to test master to main renaming for repositories in the dotnet organization.
 We are testing a smooth transition for Arcade, Maestro and other integration.
 
 # Contributing
