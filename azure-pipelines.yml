@@ -57,6 +57,7 @@ stages:
           name: Build
           displayName: Build
           condition: succeeded()
+        - task: ComponentGovernanceComponentDetection@0
 
 - ${{ if eq(variables._RunAsInternal, True) }}:
   - template: eng\common\templates\post-build\post-build.yml
